@@ -24,7 +24,9 @@ public class ExplosionEffect extends Projectile {
 
     @Override
     protected void drawProjectile(Graphics2D g2d, int screenX, int screenY, double angle) {
-        int alpha = (int) (255 * (lifeSpan / 30.0)); 
+        int alpha = (int) (255 * (lifeSpan / 60.0)); 
+        if (alpha > 255) alpha = 255;
+        if (alpha < 0) alpha = 0;
         g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
         g2d.fillOval(screenX - size / 2, screenY - size / 2, size, size);
     }
