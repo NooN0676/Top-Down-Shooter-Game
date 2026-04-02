@@ -5,13 +5,16 @@ import java.awt.Graphics2D;
 import main.GamePanel;
 
 public class TankZombie extends Zombie {
+    private double exactX, exactY;
+
     public TankZombie(GamePanel gp, int worldX, int worldY) {
         super(gp, worldX, worldY, "/res/zombies/TankZombie.png");
         this.maxHealth = 150; 
         this.health = maxHealth; 
         this.speed = 1; 
         this.damage = 20; 
-
+        this.exactX = worldX;
+        this.exactY = worldY;
     }
 
     @Override
@@ -39,14 +42,13 @@ public class TankZombie extends Zombie {
             double adjustedSpeed = speed;
 
             
-            double newWorldX = worldX + dx * adjustedSpeed;
-            double newWorldY = worldY + dy * adjustedSpeed;
+            exactX += dx * adjustedSpeed;
+            exactY += dy * adjustedSpeed;
 
             
-            worldX = (int)newWorldX;
-            worldY = (int)newWorldY;
-            //movement bozuk, düzeltmeye uğraştım fakat olduğu yerde duruyor bazen
-
+            worldX = (int)exactX;
+            worldY = (int)exactY;
+            // fixed movement truncation bug
             
         }
     }

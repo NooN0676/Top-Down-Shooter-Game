@@ -152,8 +152,16 @@ public abstract class Zombie extends Entity {
         return isAlive;
     }
 
+    protected double exactX = -1;
+    protected double exactY = -1;
+
     // hareket mantığı
     protected void moveTowardsPlayer() {
+        if (exactX == -1 && exactY == -1) {
+            exactX = worldX;
+            exactY = worldY;
+        }
+
         double dx = gp.player.worldX - this.worldX;
         double dy = gp.player.worldY - this.worldY;
         double distance = Math.sqrt(dx * dx + dy * dy);
@@ -166,8 +174,11 @@ public abstract class Zombie extends Entity {
             double adjustedSpeed = speed * 1.5;
 
             
-            int newWorldX = (int) (worldX + dx * adjustedSpeed);
-            int newWorldY = (int) (worldY + dy * adjustedSpeed);
+            exactX += dx * adjustedSpeed;
+            exactY += dy * adjustedSpeed;
+            
+            int newWorldX = (int) exactX;
+            int newWorldY = (int) exactY;
 
             
             collisionOn = false;
@@ -182,6 +193,10 @@ public abstract class Zombie extends Entity {
                     worldX = newWorldX;
                 } else if (!gp.colCheck.checkCollisionAt(worldX, newWorldY)) {
                     worldY = newWorldY;
+                } else {
+                    // Reset exact coords if we are completely blocked
+                    exactX = worldX;
+                    exactY = worldY;
                 }
             }
         }
