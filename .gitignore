@@ -26,3 +26,7 @@ target/
 # System Files
 .DS_Store
 Thumbs.db
+
+# Documentation PDFs
+Proje.pdf
+proje_rapor.pdf
