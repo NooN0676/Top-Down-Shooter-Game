@@ -1,0 +1,28 @@
+# Java
+*.class
+
+# Mobile Tools (Android)
+.gradle/
+build/
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Virtual machines
+.venv/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Build outputs
+bin/
+out/
+target/
+
+# System Files
+.DS_Store
+Thumbs.db
