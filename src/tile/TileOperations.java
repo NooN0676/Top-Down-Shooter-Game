@@ -62,14 +62,17 @@ public class TileOperations {
             tile.add(new Tile());
             tile.get(1).image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/water.png"));
             tile.get(1).collision = true;
+            tile.get(1).blocksProjectiles = false;
 
             tile.add(new Tile());
             tile.get(2).image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/fence.png"));
-            tile.get(2).collision = true; 
+            tile.get(2).collision = true;
+            tile.get(2).blocksProjectiles = true;
 
             tile.add(new Tile());
             tile.get(3).image = ImageIO.read(getClass().getResourceAsStream("/res/tiles/tomb.png"));
             tile.get(3).collision = true;
+            tile.get(3).blocksProjectiles = true;
 
         } catch (IOException e) {
             e.printStackTrace();

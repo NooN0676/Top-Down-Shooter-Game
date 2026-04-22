@@ -24,8 +24,6 @@ public abstract class Zombie extends Entity {
     protected Rectangle collidableArea = new Rectangle();
     protected String imagePath;
     protected BufferedImage image;
-    public boolean collisionOn = true;
-    protected String direction;
 
     public Zombie(GamePanel gp, int worldX, int worldY, String imagePath) {
         this.gp = gp;
@@ -162,34 +160,26 @@ public abstract class Zombie extends Entity {
             dx /= distance;
             dy /= distance;
 
-            
             double adjustedSpeed = speed * 1.5;
 
-            
             exactX += dx * adjustedSpeed;
             exactY += dy * adjustedSpeed;
-            
+
             int newWorldX = (int) exactX;
             int newWorldY = (int) exactY;
 
-            
-            collisionOn = false;
-            gp.colCheck.checkTile(this);
-
-            if (!collisionOn) {
+            if (!gp.colCheck.checkCollisionAt(newWorldX, newWorldY)) {
                 worldX = newWorldX;
                 worldY = newWorldY;
+            } else if (!gp.colCheck.checkCollisionAt(newWorldX, worldY)) {
+                worldX = newWorldX;
+                exactY = worldY;
+            } else if (!gp.colCheck.checkCollisionAt(worldX, newWorldY)) {
+                worldY = newWorldY;
+                exactX = worldX;
             } else {
-                
-                if (!gp.colCheck.checkCollisionAt(newWorldX, worldY)) {
-                    worldX = newWorldX;
-                } else if (!gp.colCheck.checkCollisionAt(worldX, newWorldY)) {
-                    worldY = newWorldY;
-                } else {
-                    // Reset exact coords if we are completely blocked
-                    exactX = worldX;
-                    exactY = worldY;
-                }
+                exactX = worldX;
+                exactY = worldY;
             }
         }
     }

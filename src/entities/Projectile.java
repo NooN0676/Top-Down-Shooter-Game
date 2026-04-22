@@ -88,9 +88,8 @@ public abstract class Projectile implements Serializable {
             return;
         }
 
-        // collision kontrolü
         int tileNum = gp.to.mapTileNumber[tileX][tileY];
-        if (gp.to.tile.get(tileNum).collision) {
+        if (gp.to.tile.get(tileNum).blocksProjectiles) {
             onWallHit();
             alive = false;
         }
