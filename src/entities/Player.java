@@ -237,29 +237,29 @@ public class Player extends Entity {
         movingLeft = kh.leftPressed;
         movingRight = kh.rightPressed;
 
-        if (movingUp || movingDown || movingLeft || movingRight) {
-            if (movingUp)
-                direction = "up";
-            if (movingDown)
-                direction = "down";
-            if (movingLeft)
-                direction = "left";
-            if (movingRight)
-                direction = "right";
+        if (movingUp) {
+            direction = "up";
+            collisionOn = false;
+            gp.colCheck.checkTile(this);
+            if (!collisionOn) worldY -= speed;
         }
-
-        collisionOn = false;
-        gp.colCheck.checkTile(this);
-
-        if (!collisionOn) {
-            if (movingUp)
-                worldY -= speed;
-            if (movingDown)
-                worldY += speed;
-            if (movingLeft)
-                worldX -= speed;
-            if (movingRight)
-                worldX += speed;
+        if (movingDown) {
+            direction = "down";
+            collisionOn = false;
+            gp.colCheck.checkTile(this);
+            if (!collisionOn) worldY += speed;
+        }
+        if (movingLeft) {
+            direction = "left";
+            collisionOn = false;
+            gp.colCheck.checkTile(this);
+            if (!collisionOn) worldX -= speed;
+        }
+        if (movingRight) {
+            direction = "right";
+            collisionOn = false;
+            gp.colCheck.checkTile(this);
+            if (!collisionOn) worldX += speed;
         }
     }
 
