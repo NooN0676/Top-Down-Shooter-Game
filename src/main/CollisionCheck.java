@@ -95,10 +95,6 @@ public class CollisionCheck implements Serializable {
         boolean collision = gp.to.tile.get(tileNum1).collision || gp.to.tile.get(tileNum2).collision ||
                 gp.to.tile.get(tileNum3).collision || gp.to.tile.get(tileNum4).collision;
 
-        if (collision) {
-            System.out.println("Collision detected at (" + worldX + ", " + worldY + ")");
-        }
-
         return collision;
     }
 

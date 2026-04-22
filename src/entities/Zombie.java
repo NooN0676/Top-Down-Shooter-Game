@@ -47,15 +47,7 @@ public abstract class Zombie extends Entity {
     }
 
     public void update() {
-        collisionOn = false;
-        gp.colCheck.checkTile(this);
-
-        if (!collisionOn) {
-            moveTowardsPlayer();
-        } else {
-            
-            return; // collision varsa hareket etmemeyi uygulamaya çalıştım
-        }
+        moveTowardsPlayer();
     }
 
     public void draw(Graphics2D g2d) {

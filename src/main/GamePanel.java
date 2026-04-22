@@ -46,7 +46,6 @@ public class GamePanel extends JPanel implements Runnable, MouseMotionListener {
     public final int maxMapRow = 50;
     public final int mapWidth = tileSize * maxMapCol;
     public final int mapHeight = tileSize * maxMapRow;
-    public File saveFile = new File("/src/res/saveFile.dat");
 
     KeyHandler kH = new KeyHandler(this);
 
@@ -154,18 +153,12 @@ public class GamePanel extends JPanel implements Runnable, MouseMotionListener {
             zombieManager.update();
             projectileManager.update();
 
-            // collision mantığı
-            for (Zombie zombie : zombieManager.getZombies()) {
-                if (zombie.collisionOn) {
-                    zombie.stopMovement();
-                }
-            }
-
             if (zombieManager.isWaveComplete()) {
                 zombieManager.startNewWave();
             }
         }
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
