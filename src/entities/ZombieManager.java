@@ -76,16 +76,20 @@ public class ZombieManager implements Serializable {
             zombieType = "acid";
         }
 
-        // çitler içinde spawn et
+        // çitler içinde spawn et, collision olmayan tile'a spawn et
         int spawnX, spawnY;
         int borderOffset = gp.tileSize * 10;
-        if (Math.random() < 0.5) {
-            spawnX = (Math.random() < 0.5) ? borderOffset : gp.mapWidth - borderOffset;
-            spawnY = (int) (Math.random() * (gp.mapHeight - 2 * borderOffset)) + borderOffset;
-        } else {
-            spawnX = (int) (Math.random() * (gp.mapWidth - 2 * borderOffset)) + borderOffset;
-            spawnY = (Math.random() < 0.5) ? borderOffset : gp.mapHeight - borderOffset;
-        }
+        int attempts = 0;
+        do {
+            if (Math.random() < 0.5) {
+                spawnX = (Math.random() < 0.5) ? borderOffset : gp.mapWidth - borderOffset;
+                spawnY = (int) (Math.random() * (gp.mapHeight - 2 * borderOffset)) + borderOffset;
+            } else {
+                spawnX = (int) (Math.random() * (gp.mapWidth - 2 * borderOffset)) + borderOffset;
+                spawnY = (Math.random() < 0.5) ? borderOffset : gp.mapHeight - borderOffset;
+            }
+            attempts++;
+        } while (attempts < 50 && isCollisionTile(spawnX, spawnY));
 
         // zombi oluştur
         Zombie zombie;
@@ -105,6 +109,13 @@ public class ZombieManager implements Serializable {
 
         zombies.add(zombie);
         zombiesAlive++;
+    }
+
+    private boolean isCollisionTile(int worldX, int worldY) {
+        int col = worldX / gp.tileSize;
+        int row = worldY / gp.tileSize;
+        if (col < 0 || col >= gp.maxMapCol || row < 0 || row >= gp.maxMapRow) return true;
+        return gp.to.tile.get(gp.to.mapTileNumber[col][row]).collision;
     }
 
     public void draw(Graphics2D g2d) {

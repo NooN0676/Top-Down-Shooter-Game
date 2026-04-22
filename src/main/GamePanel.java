@@ -1,9 +1,11 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -181,33 +183,47 @@ public class GamePanel extends JPanel implements Runnable, MouseMotionListener {
         drawUI(g2d);
     }
 
+    private static final Color UI_BG = new Color(0, 0, 0, 140);
+    private static final Color UI_TEXT = Color.WHITE;
+    private static final Font UI_FONT = new Font("Arial", Font.BOLD, 15);
+    private static final int UI_PAD = 6;
+
+    private void drawUIPanel(Graphics2D g2d, String[] lines, int x, int y) {
+        g2d.setFont(UI_FONT);
+        FontMetrics fm = g2d.getFontMetrics();
+        int lineH = fm.getHeight();
+        int maxW = 0;
+        for (String l : lines) maxW = Math.max(maxW, fm.stringWidth(l));
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.55f));
+        g2d.setColor(UI_BG);
+        g2d.fillRoundRect(x - UI_PAD, y - fm.getAscent() - UI_PAD,
+                maxW + UI_PAD * 2, lineH * lines.length + UI_PAD * 2, 8, 8);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        g2d.setColor(UI_TEXT);
+        for (int i = 0; i < lines.length; i++) {
+            g2d.drawString(lines[i], x, y + lineH * i);
+        }
+    }
+
     private void drawUI(Graphics2D g2d) {
-        // daha yumuşak bir yazı için
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-        g2d.setColor(Color.WHITE);
-
-        // silah ve mermi bilgisi
+        // bottom-left: weapon + ammo + wave + zombies
         String weaponName = player.weapons[player.currentWeaponIndex].getName();
-        String ammoText = player.weapons[player.currentWeaponIndex].getCurrentAmmo() + "/" +
-                player.weapons[player.currentWeaponIndex].getAmmoReserve();
-        g2d.drawString(weaponName, 20, 30);
-        g2d.drawString(ammoText, 20, 50);
-
-        // can barı
-        drawPlayerHealthBar(g2d, scrWidth - 140, 20);
-
-        // skor
-        String scoreText = "Score: " + score;
-        g2d.drawString(scoreText, scrWidth - 140, 60);
-
-        // dalga sayısı ve dalga numarası
+        String ammoText = "Ammo: " + player.weapons[player.currentWeaponIndex].getCurrentAmmo()
+                + " / " + player.weapons[player.currentWeaponIndex].getAmmoReserve();
         String waveText = "Wave: " + zombieManager.getWaveNumber();
         String zombiesText = "Zombies: " + zombieManager.getAliveZombies();
-        g2d.drawString(waveText, 20, scrHeight - 40);
-        g2d.drawString(zombiesText, 20, scrHeight - 20);
+        drawUIPanel(g2d, new String[]{ weaponName, ammoText, waveText, zombiesText },
+                14, scrHeight - 80);
+
+        // top-right: health bar + score
+        drawPlayerHealthBar(g2d, scrWidth - 144, 14);
+        String scoreText = "Score: " + score;
+        drawUIPanel(g2d, new String[]{ scoreText }, scrWidth - 144, 42);
     }
 
     private void drawPlayerHealthBar(Graphics2D g2d, int x, int y) {
@@ -229,14 +245,14 @@ public class GamePanel extends JPanel implements Runnable, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        mouseX = e.getX();
+        mouseY = e.getY();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-
     }
 
     public void addScore(int i) {
